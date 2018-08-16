@@ -100,7 +100,7 @@ def main():
             connected_pub.publish(False)
 
         try:
-            wifi_str = subprocess.check_output(['iwconfig', dev], stderr=subprocess.STDOUT)
+            wifi_str = subprocess.check_output(['ifconfig', dev], stderr=subprocess.STDOUT)
             fields_str = re.split('\s\s+', wifi_str)
             fields_list = [re.split('[:=]', field_str, maxsplit=1) for field_str in fields_str]
             fields_dict = {'dev': fields_str[0], 'type': fields_str[1]}
