@@ -72,11 +72,11 @@ def main():
     rospy.init_node('wireless_watcher')
 
     hz = rospy.get_param('~hz', 1)
-
     dev = rospy.get_param('~dev', None)
-    robot = rospy.get_param('~robot', 'p3-001')
+    robot = rospy.get_param('/robot_name', 'p3-001')
     chip = rospy.get_param('~wifi_hardware', None)
     firmware_version = rospy.get_param("~wifi_firmware", None)
+    kernel = rospy.get_param("~kernel", None)
     if dev is None:
         wldevs = [d for d in os.listdir(SYS_NET_PATH) if d.startswith('wl')]
         if wldevs:
@@ -100,6 +100,8 @@ def main():
         else:
             chip = "unknown"
             rospy.logwarn("Unable to detect wifi hardware chip version. Using {}".format(chip))
+    if kernel is None:
+        kernel = subprocess.check_output(["uname", "-r"], stderr=subprocess.STDOUT).strip("\n")
     previous_error = False
     previous_success = False
     r = rospy.Rate(hz)
@@ -133,6 +135,7 @@ def main():
             connection_msg.header.stamp = rospy.get_rostime()
             connection_msg.header.frame_id = robot
             connection_msg.wifi_chip = chip
+            connection_msg.kernel_version = kernel
             connection_msg.firmware_version = firmware_version
             connection_pub.publish(connection_msg)
 

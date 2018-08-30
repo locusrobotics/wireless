@@ -11,7 +11,7 @@ def solveBitrate(hr):
     return sum([float(res.split("Mb")[0]) for res in [hr["=tx-rate"], hr["=rx-rate"]]])
 
 class MikrotikWatcher(RouterOSApi):
-    def __init__(self, hostname, port, user, psk, chip, firmware, default_tx_power=27):
+    def __init__(self, hostname, port, user, psk, chip, firmware, kernel, default_tx_power=27):
         super(MikrotikWatcher, self).__init__(hostname, port)
         self._connected_publisher = rospy.Publisher("connected", Bool, queue_size=1)
         if not self.login(user, psk, verbose=False):
@@ -21,6 +21,7 @@ class MikrotikWatcher(RouterOSApi):
         self._chip = chip
         self._firmware = firmware
         self._default_tx_power = default_tx_power
+        self._kernel = kernel
 
     def talkResults(self, command_list, verbose=False):
         return [res[1] for res in self.talk(command_list, verbose=verbose) if res[0] == "!re"]
@@ -50,6 +51,7 @@ class MikrotikWatcher(RouterOSApi):
         health_report.header.frame_id = frame
         health_report.wifi_chip = self._chip
         health_report.firmware_version = self._firmware
+        health_report.kernel_version = self._kernel
         health_report.bssid = health_result["=bssid"]
         health_report.essid = health_result["=ssid"]
         health_report.signal_level = int(health_result["=signal-strength"])
