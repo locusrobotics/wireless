@@ -1,5 +1,11 @@
+std_msgs/Header header
+
 float32 bitrate  # Mb/s
 int16 txpower  # dBm
+
+# Wifi Hardware
+string wifi_chip
+string firmware_version
 
 # Fractional link quality number preserved in raw
 # field, resolved to decimal for link_quality field.
