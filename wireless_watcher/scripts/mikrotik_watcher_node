@@ -4,10 +4,11 @@ import rospy
 from wireless_watcher.mikrotik_watcher import MikrotikWatcher
 import wireless_msgs.msg
 import socket
+import subprocess
 
 if __name__ == "__main__":
     rospy.init_node("wireless_watcher_node")
-    robot = rospy.get_param('~robot', 'p3-001')
+    robot = rospy.get_param('/robot_name', 'p3-001')
     user = rospy.get_param("~username", "admin")
     psk = rospy.get_param("~password", "")
     hostname = rospy.get_param("~hostname", "10.101.64.194")
