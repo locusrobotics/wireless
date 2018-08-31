@@ -1,8 +1,8 @@
 <launch>
-  <arg name="robot" default="$(optenv ROBOT p3_001)"/>
   <arg name="username" default="admin"/>
   <arg name="password" default=""/>
   <arg name="hostname" default="10.101.64.194"/>
   <arg name="port" default="8728"/>
-  <node ns="wireless" pkg="wireless_watcher" name="wireless_watcher" type="mikrotik_watcher_node" />
+  <arg name="robot_name" default="p3_163"/>
+  <node ns="$(arg robot_name)" pkg="wireless_watcher" name="wireless_watcher" type="mikrotik_watcher_node" />
 </launch>
