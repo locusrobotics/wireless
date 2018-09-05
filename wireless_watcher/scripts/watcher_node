@@ -24,9 +24,11 @@
 
 import os
 import re
+import subprocess
+
 import rospy
 import std_msgs.msg
-import subprocess
+
 import wireless_msgs.msg
 
 SYS_NET_PATH = '/sys/class/net'
