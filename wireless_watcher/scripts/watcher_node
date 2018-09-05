@@ -76,7 +76,6 @@ def main():
     robot = rospy.get_param('/robot_name', 'p3-001')
     chip = rospy.get_param('~wifi_hardware', None)
     firmware_version = rospy.get_param("~wifi_firmware", None)
-    kernel = rospy.get_param("~kernel", None)
     if dev is None:
         wldevs = [d for d in os.listdir(SYS_NET_PATH) if d.startswith('wl')]
         if wldevs:
@@ -100,8 +99,7 @@ def main():
         else:
             chip = "unknown"
             rospy.logwarn("Unable to detect wifi hardware chip version. Using {}".format(chip))
-    if kernel is None:
-        kernel = subprocess.check_output(["uname", "-r"], stderr=subprocess.STDOUT).strip("\n")
+    kernel = subprocess.check_output(["uname", "-r"], stderr=subprocess.STDOUT).strip("\n")
     previous_error = False
     previous_success = False
     r = rospy.Rate(hz)

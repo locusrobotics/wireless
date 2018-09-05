@@ -4,7 +4,6 @@ import rospy
 from wireless_watcher.mikrotik_watcher import MikrotikWatcher
 import wireless_msgs.msg
 import socket
-import subprocess
 
 if __name__ == "__main__":
     rospy.init_node("wireless_watcher_node")
@@ -13,18 +12,14 @@ if __name__ == "__main__":
     psk = rospy.get_param("~password", "")
     hostname = rospy.get_param("~hostname", "10.101.64.194")
     port = int(rospy.get_param("~port", 8728))
-    hz = int(rospy.get_param("~hz", 1))
+    hz = int(rospy.get_param("~period", 1))
     device = rospy.get_param("~dev", None)
     chip = rospy.get_param('~wifi_hardware', "Mikrotik Netbox 5")
-    kernel = rospy.get_param("~kernel", None)
     rate = rospy.Rate(hz)
-
-    if kernel is None:
-        kernel = subprocess.check_output(["uname", "-r"], stderr=subprocess.STDOUT).strip("\n")
     
     rospy.loginfo("Connecting to mikrotik device {u}@{h}:{p}".format(u=user, h=hostname, p=port))
     try:
-        mikrotik_api = MikrotikWatcher(hostname, port, user, psk, chip, kernel)
+        mikrotik_api = MikrotikWatcher(hostname, port, user, psk, chip)
     except socket.error as err:
         raise socket.error("Failed to connect find mikrotik device at {h}:{p}\n{e}".format(h=hostname, p=port, e=err))
     if device is None:

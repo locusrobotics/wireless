@@ -3,6 +3,7 @@ import rospy
 from std_msgs.msg import Bool, Header
 from wireless_watcher.mikrotik_api import RouterOSApi
 from wireless_msgs.msg import Connection
+import subprocess
 
 def stripRes(results):
     return [res[1] for res in results if res[0] == "!re"]
@@ -11,7 +12,7 @@ def solveBitrate(hr):
     return sum([float(res.split("Mb")[0]) for res in [hr["=tx-rate"], hr["=rx-rate"]]])
 
 class MikrotikWatcher(RouterOSApi):
-    def __init__(self, hostname, port, user, psk, chip, kernel, default_tx_power=27):
+    def __init__(self, hostname, port, user, psk, chip, default_tx_power=27):
         super(MikrotikWatcher, self).__init__(hostname, port)
         self._connected_publisher = rospy.Publisher("connected", Bool, queue_size=1)
         if not self.login(user, psk, verbose=False):
@@ -21,7 +22,7 @@ class MikrotikWatcher(RouterOSApi):
         self._chip = chip
         self._firmware = self.getFirmwareVersion()
         self._default_tx_power = default_tx_power
-        self._kernel = kernel
+        self._kernel = subprocess.check_output(["uname", "-r"], stderr=subprocess.STDOUT).strip("\n")
 
     def talkResults(self, command_list, verbose=False):
         return [res[1] for res in self.talk(command_list, verbose=verbose) if res[0] == "!re"]
