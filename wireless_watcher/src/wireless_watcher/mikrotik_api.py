@@ -40,7 +40,8 @@ import sys
 
 
 class RouterOSApi(object):
-    "Routeros api"
+    '''Provides API access to mikrotik wifi devices
+    '''
     def __init__(self, hostname, port=8728):
         self.sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sk.connect((hostname, port))
@@ -66,44 +67,44 @@ class RouterOSApi(object):
     def talk(self, words, verbose=True):
         if self.writeSentence(words, verbose) == 0:
             return
-        r = []
+        res = []
         while 1:
-            i = self.readSentence(verbose)
-            if len(i) == 0:
+            sentence = self.readSentence(verbose)
+            if len(sentence) == 0:
                 continue
-            reply = i[0]
+            reply = sentence[0]
             attrs = {}
-            for w in i[1:]:
-                j = w.find('=', 1)
+            for word in sentence[1:]:
+                j = word.find('=', 1)
                 if (j == -1):
-                    attrs[w] = ''
+                    attrs[word] = ''
                 else:
-                    attrs[w[:j]] = w[j+1:]
-            r.append((reply, attrs))
+                    attrs[word[:j]] = word[j+1:]
+            res.append((reply, attrs))
             if reply == '!done':
-                return r
+                return res
 
     def writeSentence(self, words, verbose):
         ret = 0
-        for w in words:
-            self.writeWord(w, verbose)
+        for word in words:
+            self.writeWord(word, verbose)
             ret += 1
         self.writeWord('', verbose)
         return ret
 
     def readSentence(self, verbose=True):
-        r = []
+        res = []
         while 1:
-            w = self.readWord(verbose)
-            if w == '':
-                return r
-            r.append(w)
+            word = self.readWord(verbose)
+            if word == '':
+                return res
+            res.append(word)
 
-    def writeWord(self, w, verbose=True):
+    def writeWord(self, word, verbose=True):
         if verbose:
-            print "<<< " + w
-        self.writeLen(len(w))
-        self.writeStr(w)
+            print "<<< " + word
+        self.writeLen(len(word))
+        self.writeStr(word)
 
     def readWord(self, verbose=True):
         ret = self.readStr(self.readLen())
@@ -171,46 +172,58 @@ class RouterOSApi(object):
     def writeStr(self, text):
         n = 0;
         while n < len(text):
-            r = self.sk.send(text[n:])
-            if r == 0:
-                raise RuntimeError, "connection closed by remote end"
-            n += r
+            res = self.sk.send(text[n:])
+            if res == 0:
+                raise RuntimeError("Connection closed by remote end")
+            n += res
 
     def readStr(self, length):
         ret = ''
         while len(ret) < length:
-            s = self.sk.recv(length - len(ret))
-            if s == '':
-                raise RuntimeError, "connection closed by remote end"
-            ret += s
+            string = self.sk.recv(length - len(ret))
+            if string == '':
+                raise RuntimeError("Connection closed by remote end")
+            ret += string
         return ret
 
 
 def main():
     apiros = RouterOSApi(sys.argv[1], 8728);
-
     # use default username and pasword if not specified
     if len(sys.argv) == 4:
-      if not apiros.login(sys.argv[2], sys.argv[3], verbose=False):
+      if not apiros.login(sys.argv[2], sys.argv[3]):
         return
     elif len(sys.argv) == 3:
-      if not apiros.login(sys.argv[2], "", verbose=False):
+      if not apiros.login(sys.argv[2], ""):
         return
-    else :
-      if not apiros.login("admin", "", verbose=False):
+    else:
+      if not apiros.login("admin", ""):
         return
 
     inputsentence = []
-    detected_interfaces = [interface[1] for interface in apiros.getWirelessInterfaces() if interface[0] == "!re"]
-    if len(detected_interfaces) == 1:
-        name = detected_interfaces[0]["=name"]
-        print name
-    
-    res =  []
+
+    while 1:
+        res = select.select([s, sys.stdin], [], [], None)
+        if s in res[0]:
+            # something to read in socket, read sentence
+            sentence = apiros.readSentence()
+
+        if sys.stdin in res[0]:
+            # read line from input and strip off newline
+            line = sys.stdin.readline()
+            line = line[:-1]
+
+            # if empty line, send sentence and start with new
+            # otherwise append to input sentence
+            if line == '':
+                apiros.writeSentence(inputsentence)
+                inputsentence = []
+            else:
+                inputsentence.append(line)
 
 
 if __name__ == '__main__':
   if len(sys.argv) == 1:
-    print "Usage: %s IP [user] [pass]" % str(sys.argv[0])
+    print("Usage: {} IP [user] [pass]".format(sys.argv[0]))
   else:
     main()
