@@ -5,9 +5,6 @@ find_package(catkin REQUIRED)
 catkin_package()
 catkin_python_setup()
 
-install(FILES requirements.txt
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-
 install(PROGRAMS
   scripts/watcher_node
   scripts/mikrotik_watcher_node
