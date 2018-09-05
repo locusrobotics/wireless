@@ -32,34 +32,36 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 
 import argparse
-import rospy
-from wireless_watcher.mikrotik_watcher import MikrotikWatcher
-import wireless_msgs.msg
 import socket
 
-if __name__ == "__main__":
-    rospy.init_node("wireless_watcher_node")
+import rospy
+
+from wireless_watcher.mikrotik_watcher import MikrotikWatcher
+
+
+if __name__ == '__main__':
+    rospy.init_node('wireless_watcher_node')
     robot = rospy.get_param('/robot_name', 'p3_001')
-    user = rospy.get_param("~username", "admin")
-    psk = rospy.get_param("~password", "")
-    hostname = rospy.get_param("~hostname", "10.101.64.194")
-    port = int(rospy.get_param("~port", 8728))
-    hz = int(rospy.get_param("~period", 1))
-    device = rospy.get_param("~dev", None)
-    chip = rospy.get_param('~wifi_hardware', "Mikrotik Netbox 5")
+    user = rospy.get_param('~username', 'admin')
+    psk = rospy.get_param('~password', '')
+    hostname = rospy.get_param('~hostname', '10.101.64.194')
+    port = rospy.get_param('~port', 8728)
+    hz = rospy.get_param('~period', 1)
+    device = rospy.get_param('~dev', None)
+    chip = rospy.get_param('~wifi_hardware', 'Mikrotik Netbox 5')
     rate = rospy.Rate(hz)
     
-    rospy.loginfo("Connecting to mikrotik device {u}@{h}:{p}".format(u=user, h=hostname, p=port))
+    rospy.loginfo('Connecting to mikrotik device {u}@{h}:{p}'.format(u=user, h=hostname, p=port))
     try:
         mikrotik_api = MikrotikWatcher(hostname, port, user, psk, chip)
     except socket.error as err:
-        raise socket.error("Failed to connect find mikrotik device at {h}:{p}\n{e}".format(h=hostname, p=port, e=err))
+        raise socket.error('Failed to connect find mikrotik device at {h}:{p}\n{e}'.format(h=hostname, p=port, e=err))
     if device is None:
         detected_interfaces = mikrotik_api.getWirelessInterfaces()
-        if len(detected_interfaces):
-            device = detected_interfaces[0]["=name"]
-        else:
-            raise ValueError("No wireless device was set and none could be identified")
+        try:
+            device = detected_interfaces[0]['=name']
+        except KeyError, IndexError:
+            raise ValueError('No wireless device was set and none could be identified')
     while not rospy.is_shutdown():
         mikrotik_api.publishNetworkHealth(device, robot)
         rate.sleep()
