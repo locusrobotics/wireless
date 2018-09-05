@@ -16,7 +16,6 @@ if __name__ == "__main__":
     hz = int(rospy.get_param("~hz", 1))
     device = rospy.get_param("~dev", None)
     chip = rospy.get_param('~wifi_hardware', "Mikrotik Netbox 5")
-    firmware_version = rospy.get_param("~wifi_firmware", "6.42.6")
     kernel = rospy.get_param("~kernel", None)
     rate = rospy.Rate(hz)
 
@@ -25,7 +24,7 @@ if __name__ == "__main__":
     
     rospy.loginfo("Connecting to mikrotik device {u}@{h}:{p}".format(u=user, h=hostname, p=port))
     try:
-        mikrotik_api = MikrotikWatcher(hostname, port, user, psk, chip, firmware_version, kernel)
+        mikrotik_api = MikrotikWatcher(hostname, port, user, psk, chip, kernel)
     except socket.error as err:
         raise socket.error("Failed to connect find mikrotik device at {h}:{p}\n{e}".format(h=hostname, p=port, e=err))
     if device is None:
