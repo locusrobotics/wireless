@@ -11,7 +11,7 @@ def solveBitrate(hr):
     return sum([float(res.split("Mb")[0]) for res in [hr["=tx-rate"], hr["=rx-rate"]]])
 
 class MikrotikWatcher(RouterOSApi):
-    def __init__(self, hostname, port, user, psk, chip, firmware, kernel, default_tx_power=27):
+    def __init__(self, hostname, port, user, psk, chip, kernel, default_tx_power=27):
         super(MikrotikWatcher, self).__init__(hostname, port)
         self._connected_publisher = rospy.Publisher("connected", Bool, queue_size=1)
         if not self.login(user, psk, verbose=False):
