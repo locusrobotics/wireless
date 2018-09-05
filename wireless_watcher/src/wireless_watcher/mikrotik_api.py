@@ -164,6 +164,7 @@ class RouterOSApi(object):
     def monitorWirelessInterface(self, interface="wlan1"):
         return self.silentGet(["/interface/wireless/monitor","=numbers={}".format(interface),"=once="])
 
+
 def main():
     apiros = RouterOSApi(sys.argv[1], 8728);
 
@@ -185,7 +186,6 @@ def main():
         print name
     
     res =  []
-        
 
 
 if __name__ == '__main__':
