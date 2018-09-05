@@ -1,4 +1,4 @@
 <launch>
-  <arg name="roboy_name" default="$(optenv ROBOT p3_001)"/>
+  <arg name="robot_name" default="$(optenv ROBOT p3_001)"/>
   <node ns="$(arg robot_name)" pkg="wireless_watcher" name="wireless_watcher" type="watcher_node" />
 </launch>
