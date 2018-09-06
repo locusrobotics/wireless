@@ -12,4 +12,11 @@ install(PROGRAMS
 )
 
 install(DIRECTORY launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+if(CATKIN_ENABLE_TESTING)
+  find_package(roslint)
+  find_package(catkin REQUIRED COMPONENTS roslaunch)
+  roslaunch_add_file_check(launch)
+endif()
