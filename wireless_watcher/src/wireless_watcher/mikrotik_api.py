@@ -65,6 +65,8 @@ class RouterOSApi(object):
         return True
 
     def talk(self, words, verbose=True):
+        '''Transmits message to mikrotik device, returns result
+        '''
         if self.writeSentence(words, verbose) == 0:
             return
         res = []
@@ -112,62 +114,62 @@ class RouterOSApi(object):
             print ">>> " + ret
         return ret
 
-    def writeLen(self, l):
-        if l < 0x80:
-            self.writeStr(chr(l))
-        elif l < 0x4000:
-            l |= 0x8000
-            self.writeStr(chr((l >> 8) & 0xFF))
-            self.writeStr(chr(l & 0xFF))
-        elif l < 0x200000:
-            l |= 0xC00000
-            self.writeStr(chr((l >> 16) & 0xFF))
-            self.writeStr(chr((l >> 8) & 0xFF))
-            self.writeStr(chr(l & 0xFF))
-        elif l < 0x10000000:
-            l |= 0xE0000000
-            self.writeStr(chr((l >> 24) & 0xFF))
-            self.writeStr(chr((l >> 16) & 0xFF))
-            self.writeStr(chr((l >> 8) & 0xFF))
-            self.writeStr(chr(l & 0xFF))
+    def writeLen(self, length):
+        if length < 0x80:
+            self.writeStr(chr(length))
+        elif length < 0x4000:
+            length |= 0x8000
+            self.writeStr(chr((length >> 8) & 0xFF))
+            self.writeStr(chr(length & 0xFF))
+        elif length < 0x200000:
+            length |= 0xC00000
+            self.writeStr(chr((length >> 16) & 0xFF))
+            self.writeStr(chr((length >> 8) & 0xFF))
+            self.writeStr(chr(length & 0xFF))
+        elif length < 0x10000000:
+            length |= 0xE0000000
+            self.writeStr(chr((length >> 24) & 0xFF))
+            self.writeStr(chr((length >> 16) & 0xFF))
+            self.writeStr(chr((length >> 8) & 0xFF))
+            self.writeStr(chr(length & 0xFF))
         else:
             self.writeStr(chr(0xF0))
-            self.writeStr(chr((l >> 24) & 0xFF))
-            self.writeStr(chr((l >> 16) & 0xFF))
-            self.writeStr(chr((l >> 8) & 0xFF))
-            self.writeStr(chr(l & 0xFF))
+            self.writeStr(chr((length >> 24) & 0xFF))
+            self.writeStr(chr((length >> 16) & 0xFF))
+            self.writeStr(chr((length >> 8) & 0xFF))
+            self.writeStr(chr(length & 0xFF))
 
     def readLen(self):
-        c = ord(self.readStr(1))
-        if (c & 0x80) == 0x00:
+        characters = ord(self.readStr(1))
+        if (characters & 0x80) == 0x00:
             pass
-        elif (c & 0xC0) == 0x80:
-            c &= ~0xC0
-            c <<= 8
-            c += ord(self.readStr(1))
-        elif (c & 0xE0) == 0xC0:
-            c &= ~0xE0
-            c <<= 8
-            c += ord(self.readStr(1))
-            c <<= 8
-            c += ord(self.readStr(1))
-        elif (c & 0xF0) == 0xE0:
-            c &= ~0xF0
-            c <<= 8
-            c += ord(self.readStr(1))
-            c <<= 8
-            c += ord(self.readStr(1))
-            c <<= 8
-            c += ord(self.readStr(1))
-        elif (c & 0xF8) == 0xF0:
-            c = ord(self.readStr(1))
-            c <<= 8
-            c += ord(self.readStr(1))
-            c <<= 8
-            c += ord(self.readStr(1))
-            c <<= 8
-            c += ord(self.readStr(1))
-        return c
+        elif (characters & 0xC0) == 0x80:
+            characters &= ~0xC0
+            characters <<= 8
+            characters += ord(self.readStr(1))
+        elif (characters & 0xE0) == 0xC0:
+            characters &= ~0xE0
+            characters <<= 8
+            characters += ord(self.readStr(1))
+            characters <<= 8
+            characters += ord(self.readStr(1))
+        elif (characters & 0xF0) == 0xE0:
+            characters &= ~0xF0
+            characters <<= 8
+            characters += ord(self.readStr(1))
+            characters <<= 8
+            characters += ord(self.readStr(1))
+            characters <<= 8
+            characters += ord(self.readStr(1))
+        elif (characters & 0xF8) == 0xF0:
+            characters = ord(self.readStr(1))
+            characters <<= 8
+            characters += ord(self.readStr(1))
+            characters <<= 8
+            characters += ord(self.readStr(1))
+            characters <<= 8
+            characters += ord(self.readStr(1))
+        return characters
 
     def writeStr(self, text):
         n = 0;
