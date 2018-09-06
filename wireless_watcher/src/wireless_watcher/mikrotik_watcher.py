@@ -30,9 +30,8 @@
 #  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 #  POSSIBILITY OF SUCH DAMAGE.
 
-import argparse
 import rospy
-from std_msgs.msg import Bool, Header
+from std_msgs.msg import Bool
 import subprocess
 from wireless_watcher.mikrotik_api import RouterOSApi
 from wireless_msgs.msg import Connection
@@ -75,7 +74,7 @@ class MikrotikWatcher(RouterOSApi):
         return self.silentGet(["/interface/print", "?type=ether"])
 
     def monitorWirelessInterface(self, interface="wlan1"):
-        return self.silentGet(["/interface/wireless/monitor","=numbers={}".format(interface),"=once="])
+        return self.silentGet(["/interface/wireless/monitor", "=numbers={}".format(interface), "=once="])
 
     def getFirmwareVersion(self):
         res = self.silentGet(["/system/package/getall"])

@@ -32,8 +32,6 @@
 
 import binascii
 import md5
-import posix
-import time
 import socket
 import select
 import sys
@@ -52,7 +50,6 @@ class RouterOSApi(object):
             if repl == '!trap':
                 raise ValueError("Failed to login, check username and password and try again.")
             elif '=ret' in attrs.keys():
-                #for repl, attrs in self.talk(["/login"]):
                 chal = binascii.unhexlify(attrs['=ret'])
                 md = md5.new()
                 md.update('\x00')
@@ -104,14 +101,14 @@ class RouterOSApi(object):
 
     def writeWord(self, word, verbose=True):
         if verbose:
-            print "<<< " + word
+            print("<<< {}".format(word))
         self.writeLen(len(word))
         self.writeStr(word)
 
     def readWord(self, verbose=True):
         ret = self.readStr(self.readLen())
         if verbose:
-            print ">>> " + ret
+            print(">>> {}".format(ret))
         return ret
 
     def writeLen(self, length):
@@ -172,7 +169,7 @@ class RouterOSApi(object):
         return characters
 
     def writeStr(self, text):
-        n = 0;
+        n = 0
         while n < len(text):
             res = self.sk.send(text[n:])
             if res == 0:
@@ -190,25 +187,25 @@ class RouterOSApi(object):
 
 
 def main():
-    apiros = RouterOSApi(sys.argv[1], 8728);
+    apiros = RouterOSApi(sys.argv[1], 8728)
     # use default username and pasword if not specified
     if len(sys.argv) == 4:
-      if not apiros.login(sys.argv[2], sys.argv[3]):
-        return
+        if not apiros.login(sys.argv[2], sys.argv[3]):
+            return
     elif len(sys.argv) == 3:
-      if not apiros.login(sys.argv[2], ""):
-        return
+        if not apiros.login(sys.argv[2], ""):
+            return
     else:
-      if not apiros.login("admin", ""):
-        return
+        if not apiros.login("admin", ""):
+            return
 
     inputsentence = []
 
     while 1:
-        res = select.select([s, sys.stdin], [], [], None)
-        if s in res[0]:
+        res = select.select([apiros.sk, sys.stdin], [], [], None)
+        if apiros.sk in res[0]:
             # something to read in socket, read sentence
-            sentence = apiros.readSentence()
+            apiros.readSentence()
 
         if sys.stdin in res[0]:
             # read line from input and strip off newline
@@ -225,7 +222,7 @@ def main():
 
 
 if __name__ == '__main__':
-  if len(sys.argv) == 1:
-    print("Usage: {} IP [user] [pass]".format(sys.argv[0]))
-  else:
-    main()
+    if len(sys.argv) == 1:
+        print("Usage: {} IP [user] [pass]".format(sys.argv[0]))
+    else:
+        main()
