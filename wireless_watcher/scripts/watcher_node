@@ -24,9 +24,11 @@
 
 import os
 import re
+import subprocess
+
 import rospy
 import std_msgs.msg
-import subprocess
+
 import wireless_msgs.msg
 
 SYS_NET_PATH = '/sys/class/net'
@@ -38,10 +40,13 @@ def trim(field, type=int):
         return type(m.group(0))
 
 
+def grep(data, key):
+    return [line for line in data if key in line]
+
+
 class Connection(wireless_msgs.msg.Connection):
     def __init__(self, fields):
         args = {}
-
         args['bitrate'] = trim(fields.get('Bit Rate', "0.0"), float)
         args['txpower'] = trim(fields.get('Tx-Power', "0"))
         args['signal_level'] = trim(fields.get('Signal level', "0"))
@@ -70,9 +75,11 @@ def main():
     rospy.init_node('wireless_watcher')
 
     hz = rospy.get_param('~hz', 1)
-
     dev = rospy.get_param('~dev', None)
-    if not dev:
+    robot = rospy.get_param('/robot_name', 'p3-001')
+    chip = rospy.get_param('~wifi_hardware', None)
+    firmware_version = rospy.get_param("~wifi_firmware", None)
+    if dev is None:
         wldevs = [d for d in os.listdir(SYS_NET_PATH) if d.startswith('wl')]
         if wldevs:
             dev = wldevs[0]
@@ -80,7 +87,22 @@ def main():
             rospy.logfatal("No wireless device found to monitor.")
             return 1
     rospy.loginfo("Monitoring %s" % dev)
-
+    if firmware_version is None:
+        firmware_data = grep(subprocess.check_output(["ethtool", "-i", dev], stderr=subprocess.STDOUT).split("\n"),
+                             "firmware")
+        if len(firmware_data) == 1:
+            firmware_version = firmware_data[0].split(' ')[1]
+        else:
+            firmware_version = "unknown"
+            rospy.logwarn("Unable to detect wifi hardware firmware version. Using {}".format(firmware_version))
+    if chip is None:
+        devices = grep(subprocess.check_output(["lspci"], stderr=subprocess.STDOUT).split("\n"), "Network controller")
+        if len(devices) == 1:
+            chip = devices[0].split(":")[2][1:]
+        else:
+            chip = "unknown"
+            rospy.logwarn("Unable to detect wifi hardware chip version. Using {}".format(chip))
+    kernel = subprocess.check_output(["uname", "-r"], stderr=subprocess.STDOUT).strip("\n")
     previous_error = False
     previous_success = False
     r = rospy.Rate(hz)
@@ -111,6 +133,11 @@ def main():
             if "Not-Associated" not in fields_dict['Access Point']:
                 connection_msg = Connection(fields_dict)
 
+            connection_msg.header.stamp = rospy.get_rostime()
+            connection_msg.header.frame_id = robot
+            connection_msg.wifi_chip = chip
+            connection_msg.kernel_version = kernel
+            connection_msg.firmware_version = firmware_version
             connection_pub.publish(connection_msg)
 
             if not previous_success:

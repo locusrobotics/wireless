@@ -4,12 +4,17 @@
   <version>0.0.7</version>
   <description>A Python-based which publishes connection information about a linux wireless interface.</description>
 
-  <maintainer email="mpurvis@clearpath.ai">Mike Purvis</maintainer>
+  <maintainer email="delkan@locusrobotics.com">David Elkan</maintainer>
   <author>Mike Purvis</author>
 
   <license>BSD</license>
 
   <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roslint</build_depend>
+
   <exec_depend>rospy</exec_depend>
   <exec_depend>wireless_msgs</exec_depend>
+
+  <test_depend>roslaunch</test_depend>
 </package>

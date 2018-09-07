@@ -1,0 +1,15 @@
+<launch>
+  <arg name="username" default="admin"/>
+  <arg name="password" default=""/>
+  <arg name="hostname" default="10.101.64.194"/>
+  <arg name="port" default="8728"/>
+  <arg name="period" default="1"/>
+  <arg name="robot_name" default="$(optenv ROBOT ROBOT_NAME_IS_UNSET)"/>
+  <node ns="$(arg robot_name)" pkg="wireless_watcher" name="wireless_watcher" type="mikrotik_watcher_node">
+    <param name="username" value="$(arg username)"/>
+    <param name="password" value="$(arg password)"/>
+    <param name="port" value="$(arg port)"/>
+    <param name="hostname" value="$(arg hostname)"/>
+    <param name="period" value="$(arg period)"/>
+  </node>
+</launch>
