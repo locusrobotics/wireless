@@ -39,13 +39,14 @@ def trim(field, type=int):
     if m:
         return type(m.group(0))
 
+
 def grep(data, key):
     return [line for line in data if key in line]
+
 
 class Connection(wireless_msgs.msg.Connection):
     def __init__(self, fields):
         args = {}
-
         args['bitrate'] = trim(fields.get('Bit Rate', "0.0"), float)
         args['txpower'] = trim(fields.get('Tx-Power', "0"))
         args['signal_level'] = trim(fields.get('Signal level', "0"))

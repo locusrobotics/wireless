@@ -50,7 +50,7 @@ if __name__ == '__main__':
     device = rospy.get_param('~dev', None)
     chip = rospy.get_param('~wifi_hardware', 'Mikrotik Netbox 5')
     rate = rospy.Rate(hz)
-    
+
     rospy.loginfo('Connecting to mikrotik device {u}@{h}:{p}'.format(u=user, h=hostname, p=port))
     try:
         mikrotik_api = MikrotikWatcher(hostname, port, user, psk, chip)
@@ -65,5 +65,3 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         mikrotik_api.publishNetworkHealth(device, robot)
         rate.sleep()
-        
-    
