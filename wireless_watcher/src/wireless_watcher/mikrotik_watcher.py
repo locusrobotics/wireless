@@ -104,8 +104,8 @@ class MikrotikWatcher(RouterOSApi):
         health_report.noise_level = int(health_result["=noise-floor"])
         link_quality = float(health_result["=tx-ccq"])
         raw_link_quality = "/".join([str(int(0.7 * link_quality)), "70"])
-        health_report.link_quality_raw = raw_link_quality / 100.0
-        health_report.link_quality = link_quality
+        health_report.link_quality_raw = raw_link_quality
+        health_report.link_quality = link_quality / 100.0
         health_report.txpower = self._default_tx_power
         health_report.bitrate = solveBitrate(health_result)
         health_report.frequency = float(health_result["=channel"].split("/")[0]) / 1000.0
