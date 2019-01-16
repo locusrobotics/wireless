@@ -2,8 +2,8 @@
 Changelog for package wireless_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.0 (2019-01-16)
+------------------
 * adding kernel reporting
 * adding mikrotik watcher, updating watcher with new message contents
 * Package format 2.

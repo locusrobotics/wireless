@@ -2,8 +2,8 @@
 Changelog for package wireless_watcher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.0 (2019-01-16)
+------------------
 * Add ethtool dependency
 * scale link_quality not raw
 * scaling frequency and link quality for mikrotik
