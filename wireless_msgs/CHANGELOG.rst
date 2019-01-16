@@ -2,6 +2,13 @@
 Changelog for package wireless_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* adding kernel reporting
+* adding mikrotik watcher, updating watcher with new message contents
+* Package format 2.
+* Contributors: David Elkan, Mike Purvis
+
 0.0.7 (2015-09-09)
 ------------------
 * Added frequency to watcher node

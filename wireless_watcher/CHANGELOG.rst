@@ -2,6 +2,51 @@
 Changelog for package wireless_watcher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add ethtool dependency
+* scale link_quality not raw
+* scaling frequency and link quality for mikrotik
+* removing surplus hash
+* correcting roslint errors
+* correcting CMake
+* removing extra newline
+* adding roslaunch test and roslint test
+* cleaning up, especially mikrotik api
+* clarifying api
+* correcting default
+* cleaning up mikrotik watcher
+* re-ordering imports
+* roboy_name->robot_name
+* cleaning up mikrotik api
+* adding locus BSD, cleaning up mikrotik watcher
+* cleaning up mikrotik api, adding bsd, removing duplicate code
+* adding locus BSD to mikrotik_watcher_node
+* adding myself as maintainer
+* removing kernel param, kernel assigned by detection only
+* updating launch file
+* robot names has underscore
+* removing requirements
+* removing firmware as arg
+* correct_spaces
+* removing the firmware version param as it is now detected
+* correcting firmware lookup
+* reading os, not setting manually
+* changing default namespace to be robot namespace
+* correcting qualty reporting
+* correcting import error, correcting quality reporting, correcting name lookup
+* more convenient launch file
+* reordering cmake
+* adding launch file for mikrotik
+* adding kernel reporting
+* correcting link_quality
+* adding mikrotik watcher, updating watcher with new message contents
+* moving nodes to scripts, adding python setup
+* Package format 2.
+* Further pep8 fixups.
+* Auto-detect wl* device if not passed explicitly.
+* Contributors: David Elkan, Mike Purvis, Paul Bovbel
+
 0.0.7 (2015-09-09)
 ------------------
 * Added frequency to watcher node
