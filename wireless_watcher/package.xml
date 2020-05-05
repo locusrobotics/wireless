@@ -16,6 +16,7 @@
   <exec_depend>ethtool</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>wireless_msgs</exec_depend>
+  <exec_depend>pciutils</exec_depend>
 
   <test_depend>roslaunch</test_depend>
 </package>
