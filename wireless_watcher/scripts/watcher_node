@@ -132,6 +132,9 @@ def main():
             connection_msg = {}
             if "Not-Associated" not in fields_dict['Access Point']:
                 connection_msg = Connection(fields_dict)
+            else:
+                rospy.logwarn("Robot was not associated with an AP! iwconfig output was:\n{}".format(wifi_str))
+                raise RuntimeError()
 
             connection_msg.header.stamp = rospy.get_rostime()
             connection_msg.header.frame_id = robot
@@ -145,7 +148,7 @@ def main():
                 previous_error = False
                 rospy.loginfo("Retrieved status of interface %s. Now updating at %f Hz." % (dev, hz))
 
-        except subprocess.CalledProcessError:
+        except Exception:
             if not previous_error:
                 previous_error = True
                 previous_success = False
