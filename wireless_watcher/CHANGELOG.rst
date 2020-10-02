@@ -2,8 +2,8 @@
 Changelog for package wireless_watcher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2020-10-02)
+------------------
 * RST-3447 Fix crashing when wifi loses AP association (`#5 <https://github.com/locusrobotics/wireless/issues/5>`_)
   * Handling case where wifi association fails
 * added pciutils as a dep (`#4 <https://github.com/locusrobotics/wireless/issues/4>`_)
