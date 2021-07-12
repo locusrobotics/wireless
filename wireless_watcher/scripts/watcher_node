@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Software License Agreement (BSD)
 #
 # @author    Mike Purvis <mpurvis@clearpath.ai>
@@ -88,21 +88,22 @@ def main():
             return 1
     rospy.loginfo("Monitoring %s" % dev)
     if firmware_version is None:
-        firmware_data = grep(subprocess.check_output(["ethtool", "-i", dev], stderr=subprocess.STDOUT).split("\n"),
-                             "firmware")
+        firmware_data = grep(subprocess.check_output(["ethtool", "-i", dev],
+                                                     stderr=subprocess.STDOUT).decode().split("\n"), "firmware")
         if len(firmware_data) == 1:
             firmware_version = firmware_data[0].split(' ')[1]
         else:
             firmware_version = "unknown"
             rospy.logwarn("Unable to detect wifi hardware firmware version. Using {}".format(firmware_version))
     if chip is None:
-        devices = grep(subprocess.check_output(["lspci"], stderr=subprocess.STDOUT).split("\n"), "Network controller")
+        devices = grep(subprocess.check_output(["lspci"], stderr=subprocess.STDOUT).decode().split("\n"),
+                       "Network controller")
         if len(devices) == 1:
             chip = devices[0].split(":")[2][1:]
         else:
             chip = "unknown"
             rospy.logwarn("Unable to detect wifi hardware chip version. Using {}".format(chip))
-    kernel = subprocess.check_output(["uname", "-r"], stderr=subprocess.STDOUT).strip("\n")
+    kernel = subprocess.check_output(["uname", "-r"], stderr=subprocess.STDOUT).decode().strip("\n")
     previous_error = False
     previous_success = False
     r = rospy.Rate(hz)
@@ -115,14 +116,14 @@ def main():
 
     while not rospy.is_shutdown():
         try:
-            ip_str = subprocess.check_output(['ip', 'addr', 'show', dev], stderr=subprocess.STDOUT)
+            ip_str = subprocess.check_output(['ip', 'addr', 'show', dev], stderr=subprocess.STDOUT).decode()
             if re.search(r'^\s*inet\s', ip_str, re.MULTILINE):
                 connected_pub.publish(True)
         except subprocess.CalledProcessError:
             connected_pub.publish(False)
 
         try:
-            wifi_str = subprocess.check_output(['iwconfig', dev], stderr=subprocess.STDOUT)
+            wifi_str = subprocess.check_output(['iwconfig', dev], stderr=subprocess.STDOUT).decode()
             fields_str = re.split('\s\s+', wifi_str)
             fields_list = [re.split('[:=]', field_str, maxsplit=1) for field_str in fields_str]
             fields_dict = {'dev': fields_str[0], 'type': fields_str[1]}
