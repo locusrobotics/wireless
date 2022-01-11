@@ -88,8 +88,13 @@ def main():
             return 1
     rospy.loginfo("Monitoring %s" % dev)
     if firmware_version is None:
-        firmware_data = grep(subprocess.check_output(["ethtool", "-i", dev],
-                                                     stderr=subprocess.STDOUT).decode().split("\n"), "firmware")
+        try:
+            firmware_data = grep(subprocess.check_output(["ethtool", "-i", dev],
+                                                         stderr=subprocess.STDOUT).decode().split("\n"), "firmware")
+        except subprocess.CalledProcessError as e:
+            rospy.logwarn("Failed to get wireless firmware information: {}".format(str(e)))
+            firmware_data = []
+
         if len(firmware_data) == 1:
             firmware_version = firmware_data[0].split(' ')[1]
         else:
