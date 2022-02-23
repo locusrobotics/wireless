@@ -2,8 +2,8 @@
 Changelog for package wireless_watcher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2022-02-23)
+------------------
 * Catch subprocess errors when calling ethtool (#7)
 * Fixes to use python3 (#6)
 * Contributors: Alex Bencz, Gary Servin
