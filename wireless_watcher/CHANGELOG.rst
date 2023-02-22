@@ -8,8 +8,8 @@ Changelog for package wireless_watcher
 * Fixes to use python3 (#6)
 * Contributors: Alex Bencz, Gary Servin
 
-Forthcoming
------------
+0.6.0 (2023-02-22)
+------------------
 * 0.5.0
 * Update changelogs
 * Catch subprocess errors when calling ethtool (#7)
