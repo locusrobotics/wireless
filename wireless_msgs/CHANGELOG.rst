@@ -5,6 +5,12 @@ Changelog for package wireless_msgs
 0.5.0 (2022-02-23)
 ------------------
 
+Forthcoming
+-----------
+* 0.5.0
+* Update changelogs
+* Contributors: Gary Servin
+
 0.4.0 (2020-10-02)
 ------------------
 
