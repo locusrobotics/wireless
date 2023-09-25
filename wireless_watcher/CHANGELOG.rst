@@ -16,6 +16,16 @@ Changelog for package wireless_watcher
 * Fixes to use python3 (#6)
 * Contributors: Alex Bencz, Gary Servin
 
+Forthcoming
+-----------
+* 0.6.0
+* Update changelogs
+* 0.5.0
+* Update changelogs
+* Catch subprocess errors when calling ethtool (#7)
+* Fixes to use python3 (#6)
+* Contributors: Alex Bencz, Gary Servin
+
 0.4.0 (2020-10-02)
 ------------------
 * RST-3447 Fix crashing when wifi loses AP association (`#5 <https://github.com/locusrobotics/wireless/issues/5>`_)

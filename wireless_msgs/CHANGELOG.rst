@@ -11,6 +11,14 @@ Changelog for package wireless_msgs
 * Update changelogs
 * Contributors: Gary Servin
 
+Forthcoming
+-----------
+* 0.6.0
+* Update changelogs
+* 0.5.0
+* Update changelogs
+* Contributors: Gary Servin
+
 0.4.0 (2020-10-02)
 ------------------
 
