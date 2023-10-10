@@ -127,6 +127,13 @@ def main():
         except subprocess.CalledProcessError:
             connected_pub.publish(False)
 
+        # Get the ipv4 from the multiline ip_str. It might not exist at all.
+        try:
+            # eg. `inet 192.168.0.1/24`
+            ipv4 = re.search(r'inet (\d+\.\d+\.\d+\.\.\d+)\/', ip_str, re.MULTILINE).group(1)
+        except (IndexError, AttributeError):
+            ipv4 = ""
+
         try:
             wifi_str = subprocess.check_output(['iwconfig', dev], stderr=subprocess.STDOUT).decode()
             fields_str = re.split('\s\s+', wifi_str)
@@ -141,7 +148,8 @@ def main():
             else:
                 rospy.logwarn("Robot was not associated with an AP! iwconfig output was:\n{}".format(wifi_str))
                 raise RuntimeError()
-
+        
+            connection_msg.ipv4 = ipv4
             connection_msg.header.stamp = rospy.get_rostime()
             connection_msg.header.frame_id = robot
             connection_msg.wifi_chip = chip
