@@ -130,8 +130,9 @@ def main():
         # Get the ipv4 from the multiline ip_str. It might not exist at all.
         try:
             # eg. `inet 192.168.0.1/24`
-            ipv4 = re.search(r'inet (\d+\.\d+\.\d+\.\.\d+)\/', ip_str, re.MULTILINE).group(1)
-        except (IndexError, AttributeError):
+            ipv4 = re.search(r'inet (\d+\.\d+\.\d+\.\d+)\/', ip_str, re.MULTILINE).group(1)
+        # AttributeError: search failed. Robot might not have an IP address yet.
+        except AttributeError:
             ipv4 = ""
 
         try:
