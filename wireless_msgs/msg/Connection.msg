@@ -19,3 +19,5 @@ int16 noise_level  # dBm
 string essid
 string bssid
 float64 frequency
+
+string ipv4 # dot notation ipv4 for this connection. For robots this is typically the wlan0 IP address.
