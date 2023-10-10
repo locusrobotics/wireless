@@ -149,7 +149,7 @@ def main():
             else:
                 rospy.logwarn("Robot was not associated with an AP! iwconfig output was:\n{}".format(wifi_str))
                 raise RuntimeError()
-        
+
             connection_msg.ipv4 = ipv4
             connection_msg.header.stamp = rospy.get_rostime()
             connection_msg.header.frame_id = robot
