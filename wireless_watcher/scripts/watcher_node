@@ -122,18 +122,13 @@ def main():
     while not rospy.is_shutdown():
         try:
             ip_str = subprocess.check_output(['ip', 'addr', 'show', dev], stderr=subprocess.STDOUT).decode()
-            if re.search(r'^\s*inet\s', ip_str, re.MULTILINE):
-                connected_pub.publish(True)
-        except subprocess.CalledProcessError:
-            connected_pub.publish(False)
-
-        # Get the ipv4 from the multiline ip_str. It might not exist at all.
-        try:
             # eg. `inet 192.168.0.1/24`
-            ipv4 = re.search(r'inet (\d+\.\d+\.\d+\.\d+)\/', ip_str, re.MULTILINE).group(1)
-        # AttributeError: search failed. Robot might not have an IP address yet.
-        except AttributeError:
-            ipv4 = ""
+            ipv4_str = re.search(r'inet (\d+\.\d+\.\d+\.\d+)\/', ip_str, re.MULTILINE).group(1)
+            ipv4 = bytes([int(i) for i in ipv4_str.split('.')])
+            connected_pub.publish(True)
+        except (subprocess.CalledProcessError, AttributeError):
+            ipv4 = bytes()
+            connected_pub.publish(False)
 
         try:
             wifi_str = subprocess.check_output(['iwconfig', dev], stderr=subprocess.STDOUT).decode()
