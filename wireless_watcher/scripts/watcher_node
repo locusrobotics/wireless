@@ -126,13 +126,13 @@ def main():
             ipv4_str = re.search(r'inet (\d+\.\d+\.\d+\.\d+)\/', ip_str, re.MULTILINE).group(1)
             ipv4 = bytes([int(i) for i in ipv4_str.split('.')])
             connected_pub.publish(True)
-        except (subprocess.CalledProcessError, AttributeError):
+        except (subprocess.CalledProcessError, AttributeError) as e:
             ipv4 = bytes()
             connected_pub.publish(False)
 
         try:
             wifi_str = subprocess.check_output(['iwconfig', dev], stderr=subprocess.STDOUT).decode()
-            fields_str = re.split('\s\s+', wifi_str)
+            fields_str = re.split(r'\s\s+', wifi_str)
             fields_list = [re.split('[:=]', field_str, maxsplit=1) for field_str in fields_str]
             fields_dict = {'dev': fields_str[0], 'type': fields_str[1]}
             fields_dict.update(dict([field for field in fields_list if len(field) == 2]))
