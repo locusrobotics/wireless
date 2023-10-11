@@ -122,7 +122,7 @@ def main():
     while not rospy.is_shutdown():
         try:
             ip_str = subprocess.check_output(['ip', 'addr', 'show', dev], stderr=subprocess.STDOUT).decode()
-            # eg. `inet 192.168.0.1/24`
+            # eg. `inet 192.168.0.1/24`. Will raise AttributeError if not found.
             ipv4_str = re.search(r'inet (\d+\.\d+\.\d+\.\d+)\/', ip_str, re.MULTILINE).group(1)
             ipv4 = bytes([int(i) for i in ipv4_str.split('.')])
             connected_pub.publish(True)
