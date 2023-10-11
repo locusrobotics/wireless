@@ -59,7 +59,7 @@ class Connection(wireless_msgs.msg.Connection):
             args['link_quality_raw'] = fields['Link Quality']
             num, den = re.split('/', args['link_quality_raw'])
             args['link_quality'] = float(num) / float(den)
-        except:
+        except Exception:
             pass
 
         super(Connection, self).__init__(**args)
@@ -126,7 +126,7 @@ def main():
             ipv4_str = re.search(r'inet (\d+\.\d+\.\d+\.\d+)\/', ip_str, re.MULTILINE).group(1)
             ipv4 = bytes([int(i) for i in ipv4_str.split('.')])
             connected_pub.publish(True)
-        except (subprocess.CalledProcessError, AttributeError) as e:
+        except (subprocess.CalledProcessError, AttributeError):
             ipv4 = bytes()
             connected_pub.publish(False)
 
