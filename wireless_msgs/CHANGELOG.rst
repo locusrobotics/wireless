@@ -19,8 +19,8 @@ Changelog for package wireless_msgs
 * Update changelogs
 * Contributors: Gary Servin
 
-Forthcoming
------------
+0.8.0 (2024-02-02)
+------------------
 * Fix bug when no ip available and use bytes (#9)
   * Fix bug when no ip available and use bytes
   * Improve comment
