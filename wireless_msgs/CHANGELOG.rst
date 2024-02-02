@@ -19,6 +19,24 @@ Changelog for package wireless_msgs
 * Update changelogs
 * Contributors: Gary Servin
 
+Forthcoming
+-----------
+* Fix bug when no ip available and use bytes (#9)
+  * Fix bug when no ip available and use bytes
+  * Improve comment
+  * Fix roslint
+* RST-8311 Add IPv4 to Connection.msg (#8)
+  * add ipv4 handling
+  * update to clean up
+  * fix linting issue added. Does not fix existing linting issues.
+* 0.7.0
+* Update changelogs
+* 0.6.0
+* Update changelogs
+* 0.5.0
+* Update changelogs
+* Contributors: Andrew Blakey, Gary Servin, Michael Johnson
+
 0.4.0 (2020-10-02)
 ------------------
 
