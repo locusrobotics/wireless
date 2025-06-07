@@ -26,8 +26,8 @@ Changelog for package wireless_watcher
 * Fixes to use python3 (#6)
 * Contributors: Alex Bencz, Gary Servin
 
-Forthcoming
------------
+0.12.0 (2025-06-06)
+-------------------
 
 0.11.0 (2025-02-04)
 -------------------
